@@ -1,6 +1,6 @@
 from setuptools import setup,find_packages
 setup(name='dfcbenchmarker',
-      version='0.1',
+      version='1.0',
       description='dfcbenchmarker is a package that compares different dynamic functoinal connectivity methods against eachother.',
       packages = ['dfcbenchmarker'],
       package_data={'':['./dfcbenchmarker/data/']},
