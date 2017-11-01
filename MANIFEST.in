@@ -1,0 +1,4 @@
+include dfcbenchmarker/data/data/*
+include dfcbenchmarker/data/hrf/*
+include dfcbenchmarker/data/dfc/*
+include dfcbenchmarker/data/routine_params/*
