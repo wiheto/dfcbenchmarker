@@ -3,20 +3,38 @@ import dfcbenchmarker
 import numpy as np
 import pandas as pd
 def dfc_calc(data,methods=['SW','TSW','SD','JC','TD'],sw_window=63,taper_name='norm',taper_properties=[0,10],sd_distance='euclidean',td_window=7,mi='alpha',col_ind=[]):
+    """
+    Required parameters for the various differnet methods: 
 
-# sw_window=63
-# taper_name='norm'
-# taper_properties=[0,10]
-# sd_distance='euclidean'
-# td_window=7
-# mi='alpha'
+    If method == 'SW'
+        sw_window = [Integer] 
+            Length of sliding window
+
+    If method == 'TSW'
+        sw_window = [Integer] 
+            Length of sliding window
+        taper_name = [string]
+            Name of scipy.stats distribution used (see teneto.derive.derive for more information)
+        taper_properties = [list]
+            List of the different scipy.stats.[taper_name] properties. E.g. if taper_name = 'norm'; taper_properties = [0,10] with me the mean and standard deviation of the distribution. 
+    If method == 'SD'
+        sd_distance = [string]
+            Distance funciton used to calculate the similarity between time-points. Can be any of the distances functions in scipy.spatial.distance.
+    if method == 'JC'
+        There are no parmaeters, have empty dictionary as parameter input. 
+    if method == 'TD'
+        td_window= [Integer]
+            Length of window
+
+    # mi='alpha'
+    """
 
     # If data is a string, load precalcuated data
-    if isinstance(data,str):
+    if isinstance(data, str):
 
         if data == 'sim-1':
             colind = 1
-        elif data == 'sim-2' or data== 'sim-3' or data== 'sim-4':
+        elif data == 'sim-2' or data == 'sim-3' or data == 'sim-4':
             colind = 2
         else:
             raise ValueError('unknown simulation. Input must be  "sim-1", "sim-2", "sim-3" or "sim-4"')
