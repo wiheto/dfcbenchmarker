@@ -33,15 +33,20 @@ def run_simulations(routine_version=1.0,usesaved='yes',new_method=None,params_ne
 
 
     # Load parameters for the simulation routine for specified version
+    loaded = 0
     if os.path.isfile(dfcbenchmarker.__path__[0] + '/data/routine_params/' + str(routine_version) + '.json'):
         params_path = dfcbenchmarker.__path__[0] + '/data/routine_params/' + str(routine_version) + '.json'
     elif os.path.isfile(str(routine_version)):
         params_path = str(routine_version)
+    elif isinstance(routine_version,dict): 
+        params = routine_version
+        loaded = 1
     else:
         raise ValueError('Cannot find routine parameter file')
-    with open(params_path) as f:
-        params = json.load(f)
-    f.close()
+    if loaded == 0: 
+        with open(params_path) as f:
+            params = json.load(f)
+        f.close()
     params = dfcbenchmarker.check_params(params,'dfc')
     params = dfcbenchmarker.check_params(params,'simulation')
 
