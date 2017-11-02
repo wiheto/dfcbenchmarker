@@ -173,30 +173,18 @@ pipeline_params['dfc'] = {
 } 
 ```
 
-
+*This is to be completed soon*
 
 The stats dictionary consists of how many samples should be generated from the MCMC (to be included in the posterior + the number discardeed). Burn is the number discarded. 
 
+```python
 pipeline_params['stats'] = {
     "burn": 500,
     "trace": {"samples": 5500}}
 }
+```
 
-These number can change if the MCMC chains are not converging, (see trace plots that are generated in the stats folder). There may be some additional parameters implemented in the future if, for example, different distributions of the DFC estimates are used in the stats model.
-
-# Define dictionary name. Include an empty params dictionary within the dictionary. 
-sim_params = {'params':{}}
-# Name of the simulation (must be sim-1, sim-2, sim-3 or sim-4)
-sim_params['name'] = 'sim-2'
-# Randomseed
-sim_params['randomseed'] = 2017
-# 
-
-{"params": {"covar_mu": 0.2, "var": 1, "n_samples": 10000, "mu": [0, 0], "alpha": [0, 0.25, 0.5], "covar_sigma": [0.08, 0.1, 0.12], "randomseed": 2017}, "multi_index_labels": [["$\u03b1$=0", "$\u03b1$=0.25", "$\u03b1$=0.5"], ["0.08", "0.1", "0.12"]], "multi_index": ["alpha", "covar_sigma"], "name": "sim-2", "description": "Track fluctuating covariance"}, 
-
-
-params = {''}
-
+These numbers can be changed if the MCMC chains are not converging (see trace plots that are generated in the stats folder). There may be some additional parameters implemented in the future if, for example, different distributions of the DFC estimates are used in the stats model.
 
 
 ## Problems/comments?
