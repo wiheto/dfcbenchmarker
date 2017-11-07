@@ -18,7 +18,7 @@ Simulations for testing covariance tracking. Accompanies the article by Thompson
 
 - Custom parameter dictionary 
 
-##Install
+## Install
 
 You can install dfcbenchmarker through pip ([What is pip?](http://www.pythonforbeginners.com/basics/how-to-use-pip-and-pypi/)), simply type:
 
@@ -278,9 +278,7 @@ pipeline_params_3 = {
         2:{
             'name': 'JC',
             'method': 'JC',
-            'params': {
-                'sd_distance': {}
-            }
+            'params': {}
         }
     },
     'stats':{
@@ -299,7 +297,7 @@ Using this dictionary with `dfcbenchmarker.run_simulations(pipeline_params,usesa
 
 Should run both these simulations, perform the statistics and create plots for each simulaiton in ./test-simulations/
 
-*While aiming to be flexible, sometimes errors can be met * 
+*This is to be completed soon*
 
 ## Problems/comments?
 
