@@ -2,21 +2,21 @@
 
 Simulations for testing covariance tracking. Accompanies the article by Thompson et al (preprint) [A simulation and comparison of dynamic functional connectivity methods](https://www.biorxiv.org/content/early/2017/11/01/212241)
 
-## Contents 
+## Contents
 
-- Install dfcbenchmarker 
+- Install dfcbenchmarker
 
-- What you can do with dfcbenchmarker 
+- What you can do with dfcbenchmarker
 
-- What you cannot do with dfcbenchmarker 
+- What you cannot do with dfcbenchmarker
 
 - Run all simulations with default parameters
 
 - Add new method
 
-- Send the method 
+- Send the method
 
-- Custom parameter dictionary 
+- Custom parameter dictionary
 
 ## Install
 
@@ -83,51 +83,79 @@ Let us say that, for some reason a think $(x_1 + x_2)^3$ is a good estimate for 
 
 ```python
 import numpy as np
-def power3(x1,x2,params):
-return np.power(x1*x2,3)
+def add_then_power(x,power):
+  return np.power(x[0,:]+x[1,:],power)
 ```
 
-*This is to be completed soon*
+A parameter dictionary is also needed. This dictionary contains a `params` dictionary (containing arguments for the method function above, excluding the x), a name and a method name. The specified `name` will be used in figures and  tables.
+
+Here is an example:  
+
+```python
+params = {
+      'name': 'AP-3',
+      'method': 'add_then_power',
+      'params': {
+        'power': 3
+      }
+    }
+```
+
+Multiple parameter configurations of new method can be easily added (see *Custom parameter dictionary*).
+
+Then to run the new method, simply run:
+
+```
+dfcbenchmarker.run_simulations('1.0',output_dir='./with_new_method/',new_method=my_new_method,params_new_method=params)
+```
+
+The figures exported into "./with_new_method" will include both the bundled methods and newly specified method. This means that this new method can be compared to the 5 original methods in dfcbenchmarker.
 
 ## Send method
 
-*This is to be completed soon*
+Once a method has been tested, it is good for it to be shared with others.
 
-There are then a couple of questions, such as email address, name, DOIs/pmids of relevant publications which should be cited when reporting the method etc.  Then there are a number of questions to approve (e.g. everything is sent via a Google form). If you do not want to approve of things going via Google, you can just send it to me over Github/email (see article). You also have to approve that dfcbenchmarker can use the code in future version. You can also decide if you want your code to be included in [teneto](github.com/wiheto/teneto) (which is my python package for temporal network/dynamic connectivity).  
+```
+dfcbenchmarker.send_method(method_code=add_then_power,param_code=params)
+```
+
+Where `add_then_power` and `params` are defined in the previous section.
+
+There are then a couple of questions that you will then be prompted with when running this function, such as email address, name, DOIs/pmids of relevant publications which should be cited when reporting the method etc.  Then there are a number of questions to approve (e.g. everything is sent via a Google form). If you do not want to approve of things going via Google, you can just send it to me over Github/email (see article). You also have to approve that dfcbenchmarker can use the code in future version. You can also decide if you will also allow for your code to be included in [teneto](github.com/wiheto/teneto) (which is my python package for temporal network/dynamic connectivity --- not all code will necessary be chosen to be included in teneto).  
 
 Once I've looked at the code, I will send you an email and confirm it works. If I've not sent an email after 1-2 weeks, please let me know (just in case something may break with the Google form method).
 
-## Custom parameter dictionary 
+## Custom parameter dictionary
 
-The parameters for each simulation are driven by a parameter dictionary. 
+The parameters for each simulation are driven by a parameter dictionary.
 
 ### Parameter dictionary for a single simulation.
 
 To do this there are two ways. Either using `gen_data` or using the simulation specific functions (`gen_data_sim1()`, `gen_data_sim2()`, `gen_data_sim3()`, `gen_data_sim4()`).
 
-Say we want to generate data from simulation 2, we can do the following. 
+Say we want to generate data from simulation 2, we can do the following.
 
 ```python
 sim_2_params = {
-    "covar_mu": 0.2, 
-    "var": 1, 
-    "n_samples": 1000, 
+    "covar_mu": 0.2,
+    "var": 1,
+    "n_samples": 1000,
     "mu": [0, 0],
     "alpha": 0.2,
-    "covar_sigma": 0.1, 
+    "covar_sigma": 0.1,
     "randomseed": 2017
 }
 ```
 
-The entire pipline can be grouped together. 
+The entire pipeline can be grouped together.
 
 `sim2_data = dfcbenchmarker.gen_data_sim2(sim_2_params,mi=None)`
 
 The `mi`parameter is for which parameters should be looped over (see below).  
 
-This type of parameter dictionary works with `gen_data_sim1()`, `gen_data_sim2()`, `gen_data_sim3()`, `gen_data_sim4()` --- see each function's documentation for their respective parameters needed. 
+This type of parameter dictionary works with `gen_data_sim1()`, `gen_data_sim2()`, `gen_data_sim3()`, `gen_data_sim4()` --- see each function's documentation for their respective parameters needed.
 
-There is a higher level way to generate data using the funciton `gen_data()`. Using this function the above simulation specific. This allows for the mi property to be included in the parameter file. This dictionary must include three items, `name` (a string), `multi_index` (a list), and 
+There is a higher level way to generate data using the function `gen_data()`. Using this function the above simulation specific. This allows for the mi property to be included in the parameter file. This dictionary must include three items, `name` (a string), `multi_index` (a list), and
 
 ```python
 gen_sim_2_params = {
@@ -141,11 +169,11 @@ Where `sim_2_params` is equal to the dictionary already defined above. Then to r
 
 `sim2_data = dfcbenchmarker.gen_data(gen_data_params)`
 
-### Parameter dictionary for multiple simulations. 
+### Parameter dictionary for multiple simulations.
 
-`dfcbenchmarker.run_simulations()` runs the entire simulation procedure: generates data, calculates the DFC and performs the statistics, and plots the output. Calling the function as is, or with an integer, uses a predefined parameter dictionary, but you can make one yourself. 
+`dfcbenchmarker.run_simulations()` runs the entire simulation procedure: generates data, calculates the DFC and performs the statistics, and plots the output. Calling the function as is, or with an integer, uses a predefined parameter dictionary, but you can make one yourself.
 
-Here we pass a dictionary like for a single simulation, but now contains additional levels in the dictionary. 
+Here we pass a dictionary like for a single simulation, but now contains additional levels in the dictionary.
 
 The highest level of the parameter dictionary must include the following three items:
 
@@ -157,9 +185,9 @@ pipeline_params = {
 }
 ```
 
-The next level of the `simulation` and ` dfc` dictionaries state the simulation or method. Start at 0 and work your way up. 
+The next level of the `simulation` and ` dfc` dictionaries state the simulation or method. Start at 0 and work your way up.
 
-Let us say we want to perform only a single simulation this way, and a single DFC method. 
+Let us say we want to perform only a single simulation this way, and a single DFC method.
 
 ```python
 pipeline_params = {
@@ -169,7 +197,7 @@ pipeline_params = {
 }
 ```
 
-If we wanted to add multiple 3 simulations and 3 methods, simply type: 
+If we wanted to add multiple 3 simulations and 3 methods, simply type:
 
 ```python
 pipeline_params_3 = {
@@ -177,7 +205,7 @@ pipeline_params_3 = {
     'dfc':{0:{},1:{},2:{}},
     'stats': {}
 }
-``` 
+```
 
 Each simulation index can be defined as previous for single simulations:
 
@@ -197,9 +225,9 @@ pipeline_params['dfc'][0] = {
 
 The `method` is either; 'SW', 'TSW', 'TD', 'JC', or 'SD' (See section on adding a new method below, if you want to add a new method).
 
-The `name` can whatever you want (used in plotting and table creation). So let us say you have a sliding window with window size 20, and another 120, you may want the names to be 'SW-20' and 'SW-120'. 
+The `name` can whatever you want (used in plotting and table creation). So let us say you have a sliding window with window size 20, and another 120, you may want the names to be 'SW-20' and 'SW-120'.
 
-The 'params' are the parameters required for each method. See documentation of dfcbenchmarker.dfc_calc. An example of the `dfc` dictionary can then be: 
+The 'params' are the parameters required for each method. See documentation of dfcbenchmarker.dfc_calc. An example of the `dfc` dictionary can then be:
 
 ```python
 pipeline_params['dfc'][0] = {
@@ -211,7 +239,7 @@ pipeline_params['dfc'][0] = {
 }
 ```
 
-The final pipeline dictionary alongside the `simulation` and `dfc` dictionaries is the `stats` dictionary. Here you can specify of how many samples should be generated from the MCMC (to be included in the posterior + the number discardeed). Burn is the number discarded. 
+The final pipeline dictionary alongside the `simulation` and `dfc` dictionaries is the `stats` dictionary. Here you can specify of how many samples should be generated from the MCMC (to be included in the posterior + the number discarded). Burn is the number discarded.
 
 ```python
 pipeline_params['stats'] = {
@@ -222,16 +250,15 @@ pipeline_params['stats'] = {
 
 These numbers can be changed if the MCMC chains are not converging (see trace plots that are generated in the stats folder). There may be some additional parameters implemented in the future if, for example, different distributions of the DFC estimates are used in the stats model.
 
-
 This can then be run with `dfc.run_simulations()`
 
 ```python
 dfcbenchmarker.run_simulations(pipeline_params,usesaved=False,output_dir='my_pipeline')
-``` 
+```
 
 Here we also specify which directory the output should be (this is good to do when not using a default routine version.)
 
-Lets put it all together. Here we will define 2 simulations and 3 DFC methods in one dictionary at once: 
+Lets put it all together. Here we will define 2 simulations and 3 DFC methods in one dictionary at once:
 
 ```python
 pipeline_params_3 = {
@@ -240,9 +267,9 @@ pipeline_params_3 = {
             'name': 'sim-1',
             'multi_index': ['alpha'],
             'params': {
-                "mu": [0,0], 
-                "sigma": [[1,0.5],[0.5,1]], 
-                "n_samples": 10000, 
+                "mu": [0,0],
+                "sigma": [[1,0.5],[0.5,1]],
+                "n_samples": 10000,
                 "alpha": [0.2,0.8],
                 "randomseed": 2017  
             }
@@ -251,12 +278,12 @@ pipeline_params_3 = {
             'name': 'sim-2',
             'multi_index': ['alpha'],
             'params': {
-                "covar_mu": 0.2, 
-                "var": 1, 
-                "n_samples": 10000, 
+                "covar_mu": 0.2,
+                "var": 1,
+                "n_samples": 10000,
                 "mu": [0,0],
                 "alpha": [0.2,0.8],
-                "covar_sigma": 0.1, 
+                "covar_sigma": 0.1,
                 "randomseed": 2017        
             }
         },
@@ -289,16 +316,16 @@ pipeline_params_3 = {
 }
 ```
 
-The above can also be saved as a json. 
+The above can also be saved as a json.
 
-What the above code will do is generate data for 2 simulations (sim 1 and sim 2. Sim 1 loops over the `alpha` and `mu` parameters and sim 2 only loops over `alpha`) and uses 3 DFC methods (SW with 20 window size, SW with 120 as window size and Jackknife coorelation). 
+What the above code will do is generate data for 2 simulations (sim 1 and sim 2 both loop over the parameter `alpha`) and uses 3 DFC methods (SW with 20 window size, SW with 120 as window size and Jackknife correlation).
 
-Using this dictionary with `dfcbenchmarker.run_simulations(pipeline_params,usesaved=False,output_dir='test-simulations')`
+To run the simulations with the above parameters run:
 
-Should run both these simulations, perform the statistics and create plots for each simulaiton in ./test-simulations/
+`dfcbenchmarker.run_simulations(pipeline_params, usesaved=False, output_dir='test-simulations')`
 
-*This is to be completed soon*
+Should run both these simulations, perform the statistics and create plots for each simulation in ./test-simulations/
 
-## Problems/comments?
+## Problems/comments/something unclear?
 
 Leave an issue here.
