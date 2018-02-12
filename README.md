@@ -1,3 +1,6 @@
+
+# This package has been renamed. See github.com/wiheto/tvc_benchmarker
+
 # dfcbenchmarker
 
 Simulations for testing covariance tracking. Accompanies the article by Thompson et al (preprint) [A simulation and comparison of dynamic functional connectivity methods](https://www.biorxiv.org/content/early/2017/11/01/212241)
