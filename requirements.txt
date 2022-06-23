@@ -1,5 +1,5 @@
 matplotlib==1.5.3
-numpy==1.13.1
+numpy==1.22.0
 pandas==0.20.3
 pymc3==3.1
 requests==2.20.0
